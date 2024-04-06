@@ -1,6 +1,18 @@
 const Expense = require("../models/ExpenseModel");
-
-const addExpense = async (req, res) => {
+const jwt = require("jsonwebtoken");
+const User = require("../models/userModel");
+const asyncHandler = require("express-async-handler");
+const addExpense = asyncHandler(async (req, res) => {
+    const token = req.headers["x-access-token"] || req.headers["authorization"];
+    if (!token) {
+        return res.status(401).json({ message: "Not authorized." });
+    }
+    const bearerToken = token.split(" ")[1];
+    const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+        return res.status(401).json({ message: "Not authorized." });
+    }
     const { title, amount, category, description, date } = req.body;
 
     const income = Expense({
@@ -9,6 +21,7 @@ const addExpense = async (req, res) => {
         category,
         description,
         date,
+        user,
     });
 
     try {
@@ -24,38 +37,60 @@ const addExpense = async (req, res) => {
                 .json({ message: "Amount must be a positive number!" });
         }
         await income.save();
-        res.status(200).json({ message: "Expense Added" });
+        return res.status(200).json({ message: "Expense Added" });
     } catch (error) {
-        res.status(500).json({ message: "Server Error" });
+        return res.status(500).json({ message: "Server Error" });
     }
 
     console.log(income);
-};
+});
 
-const getExpense = async (req, res) => {
-    try {
-        const incomes = await Expense.find().sort({ createdAt: -1 });
-        res.status(200).json(incomes);
-    } catch (error) {
-        res.status(500).json({ message: "Server Error" });
+const getExpense = asyncHandler(async (req, res) => {
+    const token = req.headers["x-access-token"] || req.headers["authorization"];
+    if (!token) {
+        return res.status(401).json({ message: "Not authorized." });
     }
-};
+    const bearerToken = token.split(" ")[1];
+    const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+        return res.status(401).json({ message: "Not authorized." });
+    }
+    try {
+        const incomes = await Expense.find({ user: user._id }).sort({
+            createdAt: -1,
+        });
+        return res.status(200).json(incomes);
+    } catch (error) {
+        return res.status(500).json({ message: "Server Error" });
+    }
+});
 
-const deleteExpense = async (req, res) => {
+const deleteExpense = asyncHandler(async (req, res) => {
+    const token = req.headers["x-access-token"] || req.headers["authorization"];
+    if (!token) {
+        return res.status(401).json({ message: "Not authorized." });
+    }
+    const bearerToken = token.split(" ")[1];
+    const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+        return res.status(401).json({ message: "Not authorized." });
+    }
     const { id } = req.params;
-    expense = await Expense.findById(id);
+    expense = await Expense.find({ _id: id, user: user._id });
     console.log(expense);
     if (!expense) {
         return res.status(404).json({ message: "Expense not found" });
     } else {
         Expense.findByIdAndDelete(id)
             .then((income) => {
-                res.status(200).json({ message: "Expense Deleted" });
+                return res.status(200).json({ message: "Expense Deleted" });
             })
             .catch((err) => {
-                res.status(500).json({ message: "Server Error" });
+                return res.status(500).json({ message: "Server Error" });
             });
     }
-};
+});
 
 module.exports = { addExpense, getExpense, deleteExpense };
