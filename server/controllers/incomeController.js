@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-// const User = require("../models/userModel");
+const User = require("../models/userModel");
 const Income = require("../models/IncomeModel");
 const asyncHandler = require("express-async-handler");
 const addIncome = asyncHandler(async (req, res) => {
