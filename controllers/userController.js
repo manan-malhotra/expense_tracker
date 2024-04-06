@@ -1,8 +1,7 @@
 const asyncHandler = require("express-async-handler");
-const User = require("../models/UserModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
 
 const registerUser = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
@@ -47,7 +46,6 @@ const loginUser = asyncHandler(async (req, res) => {
         token,
         id: userFound._id,
         username: userFound.username,
-        contacts: userFound.contacts,
     });
 });
 
@@ -56,13 +54,12 @@ const getProfile = asyncHandler(async (req, res) => {
     if (!token) {
         res.status(401).json({ message: "Not authorized." });
     } else {
-        const bearerToken = bearerHeader.split(" ")[1];
+        const bearerToken = token.split(" ")[1];
         const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
         const user = await User.findById(decoded.id);
         res.status(200).json({
             id: user._id,
             username: user.username,
-            contacts: user.contacts,
         });
     }
 });

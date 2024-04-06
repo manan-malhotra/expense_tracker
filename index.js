@@ -13,6 +13,7 @@ app.get("/", (req, res) => {
     res.send("I am alive");
 });
 app.use("/transactions", require("./routes/transactionsRouter"));
+app.use("/users", require("./routes/userRouter"));
 app.use(errorHandler);
 
 const server = () => {
