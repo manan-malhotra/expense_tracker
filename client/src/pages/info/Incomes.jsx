@@ -9,30 +9,11 @@ import React, { useEffect } from "react";
 import { BrowserRouter, Link, Navigate } from "react-router-dom";
 
 const Income = () => {
-    const {
-        addIncome,
-        incomes,
-        getIncomes,
-        deleteIncome,
-        totalIncome,
-        token,
-        setToken,
-    } = useGlobalContext();
-    useEffect(() => {
-        if (token) {
-            console.log("No token");
-            getIncomes();
-        } else {
-            console.log("Token");
-            setToken("hahs");
-        }
-    }, []);
+    const { addIncome, incomes, getIncomes, deleteIncome, totalIncome } =
+        useGlobalContext();
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
-
-    // row - columns --> data display...
-
     return (
         <Box m="20px">
             <Header

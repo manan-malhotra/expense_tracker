@@ -43,7 +43,6 @@ const Dashboard = () => {
         });
     }, []);
 
-    console.log(totalAvailableBalance, totalI, totalE);
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
 

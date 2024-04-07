@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
     Box,
@@ -9,12 +9,19 @@ import {
     Button,
 } from "@mui/material";
 import { tokens } from "../styles/theme";
-
+import { useGlobalContext } from "../context/globalContext";
 export default function Login() {
+    const { login } = useGlobalContext();
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate("/dashboard");
+        login({ username, password });
+        // navigate("/dashboard");
     };
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            navigate("/dashboard");
+        }
+    }, []);
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [username, setUsername] = React.useState("");
@@ -72,6 +79,12 @@ export default function Login() {
                             "& .MuiInputLabel-root": {
                                 color: colors.grey[100],
                             },
+                            "& .MuiInputLabel-root:active": {
+                                color: colors.grey[400],
+                            },
+                            "& .MuiInputLabel-root:focus": {
+                                color: colors.grey[100],
+                            },
                             "& .MuiFilledInput-root": {
                                 backgroundColor: colors.primary[400],
                                 color: colors.grey[100],
@@ -82,15 +95,21 @@ export default function Login() {
                         <TextField
                             margin="normal"
                             key="password"
+                            type={"password"}
                             fullWidth
                             variant="filled"
-                            type="text"
                             label={"Password"}
                             value={password}
                             name={password}
                             onChange={(e) => setPassword(e.target.value)}
                             sx={{
                                 "& .MuiInputLabel-root": {
+                                    color: colors.grey[100],
+                                },
+                                "& .MuiInputLabel-root:active": {
+                                    color: colors.grey[400],
+                                },
+                                "& .MuiInputLabel-root:focus": {
                                     color: colors.grey[100],
                                 },
                                 "& .MuiFilledInput-root": {

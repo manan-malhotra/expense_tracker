@@ -11,17 +11,35 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import "react-pro-sidebar/dist/css/styles.css";
+import axios from "axios";
 const SidebarMenu = () => {
     const colorMode = useContext(ColorModeContext);
     const location = useLocation();
     const urlPathName = location.pathname;
-    const [id, setId] = useState(0);
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
     const [selected, setSelected] = useState(urlPathName);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const navigate = useNavigate();
+    const username = localStorage.getItem("user");
+    const findLastNumber = (inputString) => {
+        let lastNumber = null;
+
+        for (let i = inputString.length - 1; i >= 0; i--) {
+            if (!isNaN(parseInt(inputString[i]))) {
+                lastNumber = parseInt(inputString[i]);
+                break;
+            }
+        }
+
+        return lastNumber + 5;
+    };
+    const id = findLastNumber(localStorage.getItem("id"));
     const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        localStorage.removeItem("id");
+        axios.defaults.headers.common["Authorization"] = null;
         navigate("/");
     };
     useEffect(() => {
@@ -109,7 +127,7 @@ const SidebarMenu = () => {
                                         color={colors.grey[100]}
                                         sx={{ m: "10px 0 0 0" }}
                                     >
-                                        Yash Talele
+                                        {username}
                                     </Typography>
                                 </Box>
                             </Box>

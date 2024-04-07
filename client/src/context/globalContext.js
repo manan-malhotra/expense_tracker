@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 
-const BASE_URL = "http://localhost:4001/transactions/";
+const BASE_URL = "https://expens.up.railway.app/";
 
 const GlobalContext = React.createContext();
 
@@ -9,33 +9,72 @@ export const GlobalProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [error, setError] = useState(null);
-    const [token, setToken] = useState(null);
-    axios.defaults.headers.common["Authorization"] =
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MTEwM2VhNjA0NDMwNjI3NzE1YzU3MiIsInVzZXJuYW1lIjoibWFuYW4iLCJpYXQiOjE3MTI0MjQ5NzcsImV4cCI6MTcxNTAxNjk3N30.JEGfe_G7vNiYy1NoF4IERBUEZhqxLPKHDr5-48OEa0I";
+    const axiosSetter = axios.create({
+        baseURL: BASE_URL,
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    });
+    const login = async (user) => {
+        const response = await axios
+            .post(`${BASE_URL}users/login`, user)
+            .catch((err) => {
+                setError(err.response.data.message);
+            });
+        if (response) {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", response.data.username);
+            localStorage.setItem("id", response.data.id);
+            window.location.reload();
+            axios.defaults.headers.common["Authorization"] =
+                "Bearer " + response.data.token;
+        }
+    };
+    const register = async (user) => {
+        console.log(user);
+        const response = await axios
+            .post(`${BASE_URL}users/register`, user)
+            .catch((err) => {
+                setError(err.response.data.message);
+            });
+        console.log(response);
+        if (response) {
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
+            localStorage.setItem("id", response.data.id);
+            window.location.reload();
+        }
+    };
 
     //calculate incomes
     const addIncome = async (income) => {
-        const response = await axios
-            .post(`${BASE_URL}addIncome`, income)
+        const response = await axiosSetter
+            .post(`${BASE_URL}transactions/addIncome`, income)
             .catch((err) => {
+                console.log(err.response.data.message);
                 setError(err.response.data.message);
             });
         getIncomes();
     };
 
     const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}getIncome`);
+        const response = await axiosSetter.get(
+            `${BASE_URL}transactions/getIncome`
+        );
         setIncomes(response.data);
-        console.log(response.data);
     };
 
     const deleteIncome = async (id) => {
-        const res = await axios.delete(`${BASE_URL}deleteIncome/${id}`);
+        const res = await axiosSetter.delete(
+            `${BASE_URL}transactions/deleteIncome/${id}`
+        );
         getIncomes();
     };
 
     const totalIncome = async () => {
-        const responseIncome = await axios.get(`${BASE_URL}getIncome`);
+        const responseIncome = await axiosSetter.get(
+            `${BASE_URL}transactions/getIncome`
+        );
         let totalIncome = 0;
         responseIncome.data.forEach((income) => {
             totalIncome = totalIncome + income.amount;
@@ -46,8 +85,8 @@ export const GlobalProvider = ({ children }) => {
 
     //calculate incomes
     const addExpense = async (income) => {
-        const response = await axios
-            .post(`${BASE_URL}addExpense`, income)
+        const response = await axiosSetter
+            .post(`${BASE_URL}transactions/addExpense`, income)
             .catch((err) => {
                 setError(err.response.data.message);
             });
@@ -55,18 +94,23 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}getExpense`);
+        const response = await axiosSetter.get(
+            `${BASE_URL}transactions/getExpense`
+        );
         setExpenses(response.data);
-        console.log(response.data);
     };
 
     const deleteExpense = async (id) => {
-        const res = await axios.delete(`${BASE_URL}deleteExpense/${id}`);
+        const res = await axiosSetter.delete(
+            `${BASE_URL}transactions/deleteExpense/${id}`
+        );
         getExpenses();
     };
 
     const totalExpenses = async () => {
-        const responseExpense = await axios.get(`${BASE_URL}getExpense`);
+        const responseExpense = await axiosSetter.get(
+            `${BASE_URL}transactions/getExpense`
+        );
         let totalIncome = 0;
         responseExpense.data.forEach((income) => {
             totalIncome = totalIncome + income.amount;
@@ -76,12 +120,16 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const totalBalance = async () => {
-        const responseIncome = await axios.get(`${BASE_URL}getIncome`);
+        const responseIncome = await axiosSetter.get(
+            `${BASE_URL}transactions/getIncome`
+        );
         let totalIncome = 0;
         responseIncome.data.forEach((income) => {
             totalIncome = totalIncome + income.amount;
         });
-        const responseExpense = await axios.get(`${BASE_URL}getExpense`);
+        const responseExpense = await axiosSetter.get(
+            `${BASE_URL}transactions/getExpense`
+        );
         let totalExpense = 0;
         responseExpense.data.forEach((income) => {
             totalIncome = totalIncome + income.amount;
@@ -90,8 +138,12 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const transactionHistory = async () => {
-        const responseExpense = await axios.get(`${BASE_URL}getExpense`);
-        const responseIncome = await axios.get(`${BASE_URL}getIncome`);
+        const responseExpense = await axiosSetter.get(
+            `${BASE_URL}transactions/getExpense`
+        );
+        const responseIncome = await axiosSetter.get(
+            `${BASE_URL}transactions/getIncome`
+        );
         const history = [...responseExpense.data, ...responseIncome.data];
         history.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
@@ -101,8 +153,12 @@ export const GlobalProvider = ({ children }) => {
     };
 
     const numberOfTransactions = async () => {
-        const responseExpense = await axios.get(`${BASE_URL}getExpense`);
-        const responseIncome = await axios.get(`${BASE_URL}getIncome`);
+        const responseExpense = await axiosSetter.get(
+            `${BASE_URL}transactions/getExpense`
+        );
+        const responseIncome = await axiosSetter.get(
+            `${BASE_URL}transactions/getIncome`
+        );
         const history = [...responseExpense.data, ...responseIncome.data];
         history.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
@@ -129,8 +185,8 @@ export const GlobalProvider = ({ children }) => {
                 numberOfTransactions,
                 error,
                 setError,
-                token,
-                setToken,
+                login,
+                register,
             }}
         >
             {children}
