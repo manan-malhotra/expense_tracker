@@ -5,72 +5,89 @@ import { Header } from "../../components";
 import { Box } from "@mui/material";
 import incomeColumns from "../../constants/incomeColumns";
 import { useGlobalContext } from "../../context/globalContext";
-import React, { useEffect } from 'react'
-import { Link } from "react-router-dom";
-
+import React, { useEffect } from "react";
+import { BrowserRouter, Link, Navigate } from "react-router-dom";
 
 const Income = () => {
-  const {addIncome,incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
-  useEffect(() =>{
-        getIncomes()
-    }, [])
+    const {
+        addIncome,
+        incomes,
+        getIncomes,
+        deleteIncome,
+        totalIncome,
+        token,
+        setToken,
+    } = useGlobalContext();
+    useEffect(() => {
+        if (token) {
+            console.log("No token");
+            getIncomes();
+        } else {
+            console.log("Token");
+            setToken("hahs");
+        }
+    }, []);
 
+    const theme = useTheme();
+    const colors = tokens(theme.palette.mode);
 
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+    // row - columns --> data display...
 
-  
-  // row - columns --> data display...
-  return (
-    <Box m="20px">
-
-      <Header title="Income" subtitle="List of Income for Future Reference" />
-      <Link style={{color: "white", textDecoration: "none"}} to="/incomeform">Add Income</Link>
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        // custom css for material ui
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "none",
-          },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: colors.blueAccent[700],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: colors.primary[400],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: colors.blueAccent[700],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${colors.greenAccent[200]} !important`,
-          },
-          // 🟧🟧🟧 data filter tool-bar present here 🟧🟧🟧
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${colors.grey[100]} !important`,
-          },
-        }}
-      >
-
-        <DataGrid
-        getRowId={(row) => row._id}
-          rows={incomes}
-          columns={incomeColumns}
-          components={{ Toolbar: GridToolbar }}
-        />
-
-      </Box>
-    </Box>
-  );
+    return (
+        <Box m="20px">
+            <Header
+                title="Income"
+                subtitle="List of Income for Future Reference"
+            />
+            <Link
+                style={{ color: "white", textDecoration: "none" }}
+                to="/incomeform"
+            >
+                Add Income
+            </Link>
+            <Box
+                m="40px 0 0 0"
+                height="75vh"
+                // custom css for material ui
+                sx={{
+                    "& .MuiDataGrid-root": {
+                        border: "none",
+                    },
+                    "& .MuiDataGrid-cell": {
+                        borderBottom: "none",
+                    },
+                    "& .name-column--cell": {
+                        color: colors.greenAccent[300],
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                        backgroundColor: colors.blueAccent[700],
+                        borderBottom: "none",
+                    },
+                    "& .MuiDataGrid-virtualScroller": {
+                        backgroundColor: colors.primary[400],
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                        borderTop: "none",
+                        backgroundColor: colors.blueAccent[700],
+                    },
+                    "& .MuiCheckbox-root": {
+                        color: `${colors.greenAccent[200]} !important`,
+                    },
+                    // 🟧🟧🟧 data filter tool-bar present here 🟧🟧🟧
+                    "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+                        color: `${colors.grey[100]} !important`,
+                    },
+                }}
+            >
+                <DataGrid
+                    getRowId={(row) => row._id}
+                    rows={incomes}
+                    columns={incomeColumns}
+                    components={{ Toolbar: GridToolbar }}
+                />
+            </Box>
+        </Box>
+    );
 };
 
 export default Income;

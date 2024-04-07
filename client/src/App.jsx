@@ -8,10 +8,13 @@ import {
     IncomeInputForm,
     ExpenseInputForm,
 } from "./pages";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./styles/theme";
 import { useGlobalContext } from "./context/globalContext";
+import Login from "./pages/Login";
+import Paths from "./Paths";
+import Register from "./pages/Register";
 
 const App = () => {
     const [theme, coloMode] = useMode();
@@ -23,34 +26,12 @@ const App = () => {
                 <CssBaseline />
 
                 <BrowserRouter>
-                    <main className="app">
-                        <SidebarMenu />
-
-                        <section className="content">
-                            {/* <Topbar /> */}
-
-                            <Routes>
-                                <Route path="/" element={<Dashboard />} />
-                                <Route
-                                    path="/transactionHistory"
-                                    element={<TransactionHistory />}
-                                />
-                                <Route path="/income" element={<Income />} />
-                                <Route
-                                    path="/expenses"
-                                    element={<Expenses />}
-                                />
-                                <Route
-                                    path="/incomeform"
-                                    element={<IncomeInputForm />}
-                                />
-                                <Route
-                                    path="/expenseform"
-                                    element={<ExpenseInputForm />}
-                                />
-                            </Routes>
-                        </section>
-                    </main>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/*" element={<Paths />} />
+                    </Routes>
                 </BrowserRouter>
             </ThemeProvider>
         </ColorModeContext.Provider>

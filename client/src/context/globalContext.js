@@ -9,6 +9,7 @@ export const GlobalProvider = ({ children }) => {
     const [incomes, setIncomes] = useState([]);
     const [expenses, setExpenses] = useState([]);
     const [error, setError] = useState(null);
+    const [token, setToken] = useState(null);
     axios.defaults.headers.common["Authorization"] =
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MTEwM2VhNjA0NDMwNjI3NzE1YzU3MiIsInVzZXJuYW1lIjoibWFuYW4iLCJpYXQiOjE3MTI0MjQ5NzcsImV4cCI6MTcxNTAxNjk3N30.JEGfe_G7vNiYy1NoF4IERBUEZhqxLPKHDr5-48OEa0I";
 
@@ -128,6 +129,8 @@ export const GlobalProvider = ({ children }) => {
                 numberOfTransactions,
                 error,
                 setError,
+                token,
+                setToken,
             }}
         >
             {children}

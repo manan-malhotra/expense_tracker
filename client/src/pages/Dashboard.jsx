@@ -17,6 +17,7 @@ const Dashboard = () => {
         totalBalance,
         transactionHistory,
         numberOfTransactions,
+        token,
     } = useGlobalContext();
     const [history, setHistory] = useState([]);
     const [totalI, setTotalI] = useState(0);
@@ -24,6 +25,7 @@ const Dashboard = () => {
     const [totalAvailableBalance, setTotalAvailableBalance] = useState(0);
     const [num, setNum] = useState(0);
     useEffect(() => {
+        // if (!token) return;
         totalIncome().then((income) => {
             setTotalI(income);
         });
