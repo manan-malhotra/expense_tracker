@@ -39,7 +39,6 @@ const addExpense = asyncHandler(async (req, res) => {
         await income.save();
         return res.status(200).json({ message: "Expense Added" });
     } catch (error) {
-        console.log(error.message);
         return res.status(500).json({ message: "Server Error" });
     }
 });
@@ -78,7 +77,6 @@ const deleteExpense = asyncHandler(async (req, res) => {
     }
     const { id } = req.params;
     expense = await Expense.find({ _id: id, user: user._id });
-    console.log(expense);
     if (!expense) {
         return res.status(404).json({ message: "Expense not found" });
     } else {

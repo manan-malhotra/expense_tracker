@@ -35,7 +35,6 @@ const addIncome = asyncHandler(async (req, res) => {
                 .json({ message: "Amount must be a positive number!" });
         }
         await income.save();
-        console.log(income);
         return res.status(200).json({ message: "Income Added" });
     } catch (error) {
         return res.status(500).json({ message: "Server Error" });
@@ -58,7 +57,6 @@ const getIncome = asyncHandler(async (req, res) => {
         });
         return res.status(200).json(incomes);
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Server Error" });
     }
 });
@@ -75,7 +73,6 @@ const deleteIncome = asyncHandler(async (req, res) => {
     }
     const { id } = req.params;
     income = await Income.find({ _id: id, user: user._id });
-    console.log(income);
     if (!income) {
         return res.status(404).json({ message: "Income not found" });
     } else {
