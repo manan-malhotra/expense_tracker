@@ -19,6 +19,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username,
         password: hashedPassword,
     });
+    console.log(userCreated);
     const token = generateToken(userCreated);
     res.status(201).json({
         id: userCreated._id,
@@ -41,7 +42,6 @@ const loginUser = asyncHandler(async (req, res) => {
         res.status(400).json({ message: "Incorrect password." });
     }
 
-    console.log(userFound.password);
     const token = generateToken(userFound);
     res.status(200).json({
         token,
@@ -50,29 +50,10 @@ const loginUser = asyncHandler(async (req, res) => {
     });
 });
 
-const getProfile = asyncHandler(async (req, res) => {
-    const token = req.headers["x-access-token"] || req.headers["authorization"];
-    if (!token) {
-        res.status(401).json({ message: "Not authorized." });
-    } else {
-        const bearerToken = token.split(" ")[1];
-        const decoded = jwt.verify(bearerToken, process.env.SECRET_KEY);
-        const user = await User.findById(decoded.id);
-        res.status(200).json({
-            id: user._id,
-            username: user.username,
-        });
-    }
-});
-
-const logout = asyncHandler(async (req, res) => {
-    res.status(200).json({ message: "Logged out successfully." });
-});
-
 const generateToken = ({ _id, username }) => {
     return jwt.sign({ id: _id, username }, process.env.SECRET_KEY, {
         expiresIn: "30d",
     });
 };
 
-module.exports = { registerUser, loginUser, getProfile, logout };
+module.exports = { registerUser, loginUser };

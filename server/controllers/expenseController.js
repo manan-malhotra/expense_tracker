@@ -39,10 +39,9 @@ const addExpense = asyncHandler(async (req, res) => {
         await income.save();
         return res.status(200).json({ message: "Expense Added" });
     } catch (error) {
+        console.log(error.message);
         return res.status(500).json({ message: "Server Error" });
     }
-
-    console.log(income);
 });
 
 const getExpense = asyncHandler(async (req, res) => {
