@@ -13,7 +13,6 @@ const addExpense = asyncHandler(async (req, res) => {
     if (!user) {
         return res.status(401).json({ message: "Not authorized." });
     }
-    console.log(user);
     const { title, amount, category, description, date } = req.body;
 
     const income = Expense({
