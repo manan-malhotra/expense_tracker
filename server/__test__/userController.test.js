@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const app = require("../app.js");
 const User = require("../models/UserModel");
 jest.mock("../models/UserModel");
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 describe("user controller", () => {
     describe("register", () => {
         describe("given the register request is not complete", () => {

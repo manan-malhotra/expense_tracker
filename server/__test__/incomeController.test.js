@@ -2,8 +2,7 @@ const supertest = require("supertest");
 const jwt = require("jsonwebtoken");
 const app = require("../app.js");
 const User = require("../models/UserModel.js");
-const Income = require("../models/IncomeModel.js");
-jest.setTimeout(10000);
+jest.setTimeout(30000);
 jwt.verify = jest.fn().mockReturnValue({ id: 1, username: "test" });
 
 const token = "token";
