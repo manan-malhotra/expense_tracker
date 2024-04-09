@@ -1,19 +1,8 @@
 require("dotenv").config();
-
+const app = require("./app");
 const PORT = process.env.PORT || 3000;
-const express = require("express");
-const app = express();
-const cors = require("cors");
 const connectDB = require("./config/db");
 const { errorHandler } = require("./middleware/errorMiddleware.js");
-//middleware
-app.use(express.json());
-app.use(cors());
-app.get("/", (req, res) => {
-    res.send("I am alive");
-});
-app.use("/transactions", require("./routes/transactionsRouter"));
-app.use("/users", require("./routes/userRouter"));
 app.use(errorHandler);
 
 const server = () => {
