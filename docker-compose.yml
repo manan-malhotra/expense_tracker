@@ -1,0 +1,14 @@
+services:
+    web:
+        build:
+            context: ./client
+            dockerfile: Dockerfile
+        ports:
+            - 3000:3000
+    server:
+        build:
+            context: ./server
+            dockerfile: Dockerfile
+        env_file: env
+        ports:
+            - 4000:4000
