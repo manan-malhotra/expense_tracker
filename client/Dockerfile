@@ -1,6 +1,10 @@
-FROM node
-ADD . /client
+FROM node:alpine AS builder
 WORKDIR /client
-RUN rm -rf node_modules
-RUN npm install --force
-ENTRYPOINT ["npm", "start"]
+COPY ./package.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /client/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
