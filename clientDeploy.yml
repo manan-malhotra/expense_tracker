@@ -1,0 +1,52 @@
+- name: Deploy Docker Compose with Environment Variables
+  hosts: remote
+  remote_user: yashtalele
+  vars:
+      ansible_user: yashtalele
+      ansible_password: yash@#97
+      ansible_python_interpreter: /usr/bin/python3
+  tasks:
+      - name: Login in docker hub with user
+        community.general.docker_login:
+            username: manan80malhotra
+            password: Adyybfkc1!
+      - name: git pull
+        git:
+            repo: https://github.com/manan-malhotra/expense_tracker.git
+            dest: /Users/yashtalele/expense_tracker
+      - name: Build Docker image
+        community.general.docker_image:
+            name: manan80malhotra/expense_tracker_client
+            tag: latest
+            source: build
+            build:
+                path: /Users/yashtalele/expense_tracker/client/
+                dockerfile: Dockerfile
+      - name: Push Docker image to Docker Hub
+        community.general.docker_image:
+            name: manan80malhotra/expense_tracker_client
+            tag: latest
+            push: yes
+            source: local
+      - name: Stop Docker containers
+        community.general.docker_container:
+            name: exp
+            state: absent
+      - name: Delete Docker image
+        community.general.docker_image:
+            name: manan80malhotra/expense_tracker_client
+            tag: latest
+            state: absent
+      - name: Pull Docker image from Docker Hub
+        community.general.docker_image:
+            name: manan80malhotra/expense_tracker_client
+            tag: latest
+            source: pull
+            force_source: yes
+      - name: docker run
+        community.general.docker_container:
+            name: exp
+            image: manan80malhotra/expense_tracker_client:latest
+            ports:
+                - 3000:80
+            command:
