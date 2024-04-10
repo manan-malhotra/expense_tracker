@@ -13,6 +13,8 @@
       - name: Delete pods if running2
         ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
         ignore_errors: true
+      - name: Sleep
+        ansible.builtin.shell: sleep 30
       - name: Delete pods if running3
         ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
         ignore_errors: true
