@@ -6,7 +6,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 app.get("/", (req, res) => {
-    res.send("I am alive");
+    res.send("Server is up and running");
 });
 app.use("/transactions", require("./routes/transactionsRouter"));
 app.use("/users", require("./routes/userRouter"));
