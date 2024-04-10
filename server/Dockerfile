@@ -1,5 +1,5 @@
 # Base image
-FROM node
+FROM node:alpine
 ADD . /app
 WORKDIR /app
 RUN rm -rf node_modules

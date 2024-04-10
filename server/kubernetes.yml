@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: expense-tracker
+    namespace: ngrok-ingress-controller
+spec:
+    ports:
+        - name: http
+          port: 4000
+          targetPort: 4000
+    selector:
+        app: expense-tracker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: expense-tracker
+    namespace: ngrok-ingress-controller
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: expense-tracker
+    template:
+        metadata:
+            labels:
+                app: expense-tracker
+        spec:
+            containers:
+                - name: expense-tracker
+                  image: manan80malhotra/expense_tracker
+                  ports:
+                      - name: http
+                        containerPort: 4000
+---
+# ngrok Ingress Controller Configuration
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: expense-tracker-ingress
+    namespace: ngrok-ingress-controller
+spec:
+    ingressClassName: ngrok
+    rules:
+        - host: shepherd-casual-subtly.ngrok-free.app
+          http:
+              paths:
+                  - path: /
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: expense-tracker
+                            port:
+                                number: 4000
