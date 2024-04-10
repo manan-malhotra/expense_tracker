@@ -6,6 +6,10 @@
       ansible_user: yashtalele
       ansible_password: yash@#97
   tasks:
+      - name: Environment setup
+        ansible.builtin.copy:
+            src: ./expense_tracker/server/.env
+            dest: /Users/yashtalele/expense_tracker/server/.env
       - name: Login in docker hub with user
         community.general.docker_login:
             username: manan80malhotra
@@ -15,14 +19,12 @@
         ignore_errors: true
       - name: Sleep
         ansible.builtin.shell: sleep 30
-      - name: Delete pods if running3
-        ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
-        ignore_errors: true
       - name: Delete Docker image
         community.general.docker_image:
             name: manan80malhotra/expense_tracker
             tag: latest
             state: absent
+        ignore_errors: true
       - name: Build Docker image
         community.general.docker_image:
             name: manan80malhotra/expense_tracker
