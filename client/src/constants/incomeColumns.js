@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const incomeColumns = [
   { field: "title", headerName: "Title" },
   {
@@ -8,10 +10,13 @@ const incomeColumns = [
   {
     field: "date",
     headerName: "Date",
-    type: "number",
+    type: "Date",
     headerAlign: "left",
     flex: 1,
     align: "left",
+    renderCell: ({ row: { date } }) => {
+      return dateFormat(date);
+    },
   },
   {
     field: "description",
@@ -24,5 +29,9 @@ const incomeColumns = [
     flex: 1,
   },
 ];
+
+const dateFormat = (date) => {
+  return moment(date).format("DD MMM YYYY");
+};
 
 export default incomeColumns;
