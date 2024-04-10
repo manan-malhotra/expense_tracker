@@ -14,6 +14,15 @@
         git:
             repo: https://github.com/manan-malhotra/expense_tracker.git
             dest: /Users/yashtalele/expense_tracker
+      - name: Stop Docker containers
+        community.general.docker_container:
+            name: exp
+            state: absent
+      - name: Delete Docker image
+        community.general.docker_image:
+            name: manan80malhotra/expense_tracker_client
+            tag: latest
+            state: absent
       - name: Build Docker image
         community.general.docker_image:
             name: manan80malhotra/expense_tracker_client
@@ -28,15 +37,6 @@
             tag: latest
             push: yes
             source: local
-      - name: Stop Docker containers
-        community.general.docker_container:
-            name: exp
-            state: absent
-      - name: Delete Docker image
-        community.general.docker_image:
-            name: manan80malhotra/expense_tracker_client
-            tag: latest
-            state: absent
       - name: Pull Docker image from Docker Hub
         community.general.docker_image:
             name: manan80malhotra/expense_tracker_client

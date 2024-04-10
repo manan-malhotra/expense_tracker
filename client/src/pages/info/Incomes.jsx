@@ -14,7 +14,6 @@ const Income = () => {
     const [totalI, setTotalI] = useState([]);
     useEffect(() => {
         getIncomes().then((income) => {
-            console.log(income);
             setTotalI(income);
         });
     }, []);
