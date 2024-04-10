@@ -8,7 +8,7 @@
   tasks:
       - name: Environment setup
         ansible.builtin.copy:
-            src: ./expense_tracker/server/.env
+            src: server/.env
             dest: /Users/yashtalele/expense_tracker/server/.env
       - name: Login in docker hub with user
         community.general.docker_login:
