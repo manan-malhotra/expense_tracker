@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 
-const BASE_URL = "https://expens.up.railway.app/";
+const BASE_URL = "https://shepherd-casual-subtly.ngrok-free.app/";
 
 const GlobalContext = React.createContext();
 
