@@ -62,6 +62,7 @@ export const GlobalProvider = ({ children }) => {
             `${BASE_URL}transactions/getIncome`
         );
         setIncomes(response.data);
+        return response.data;
     };
 
     const deleteIncome = async (id) => {

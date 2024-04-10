@@ -5,12 +5,19 @@ import { Header } from "../../components";
 import { Box } from "@mui/material";
 import incomeColumns from "../../constants/incomeColumns";
 import { useGlobalContext } from "../../context/globalContext";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Link, Navigate } from "react-router-dom";
 
 const Income = () => {
     const { addIncome, incomes, getIncomes, deleteIncome, totalIncome } =
         useGlobalContext();
+    const [totalI, setTotalI] = useState([]);
+    useEffect(() => {
+        getIncomes().then((income) => {
+            console.log(income);
+            setTotalI(income);
+        });
+    }, []);
 
     const theme = useTheme();
     const colors = tokens(theme.palette.mode);
@@ -60,12 +67,16 @@ const Income = () => {
                     },
                 }}
             >
-                <DataGrid
-                    getRowId={(row) => row._id}
-                    rows={incomes}
-                    columns={incomeColumns}
-                    components={{ Toolbar: GridToolbar }}
-                />
+                {totalI && totalI.length === 0 ? (
+                    <h1>No Incomes</h1>
+                ) : (
+                    <DataGrid
+                        getRowId={(row) => row._id}
+                        rows={totalI}
+                        columns={incomeColumns}
+                        components={{ Toolbar: GridToolbar }}
+                    />
+                )}
             </Box>
         </Box>
     );
