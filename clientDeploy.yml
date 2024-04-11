@@ -1,15 +1,15 @@
 - name: Deploy Docker Compose with Environment Variables
   hosts: remote
-  remote_user: yashtalele
+  remote_user: "{{REMOTE_USER}}"
   vars:
-      ansible_user: yashtalele
-      ansible_password: yash@#97
+      ansible_user: "{{REMOTE_USER}}"
+      ansible_password: "{{REMOTE_PASSWORD}}"
       ansible_python_interpreter: /usr/bin/python3
   tasks:
       - name: Login in docker hub with user
         community.general.docker_login:
-            username: manan80malhotra
-            password: Adyybfkc1!
+            username: "{{DOCKER_HUB_USER}}"
+            password: "{{DOCKER_HUB_PASSWORD}}"
       - name: git pull
         git:
             repo: https://github.com/manan-malhotra/expense_tracker.git

@@ -1,10 +1,10 @@
 - name: Kubernetes
   hosts: remote
-  remote_user: yashtalele
+  remote_user: "{{REMOTE_USER}}"
   vars:
       ansible_python_interpreter: /usr/bin/python3
-      ansible_user: yashtalele
-      ansible_password: yash@#97
+      ansible_user: "{{REMOTE_USER}}"
+      ansible_password: "{{REMOTE_PASSWORD}}"
   tasks:
       - name: Environment setup
         ansible.builtin.copy:
@@ -12,8 +12,8 @@
             dest: /Users/yashtalele/expense_tracker/server/.env
       - name: Login in docker hub with user
         community.general.docker_login:
-            username: manan80malhotra
-            password: Adyybfkc1!
+            username: "{{DOCKER_HUB_USER}}"
+            password: "{{DOCKER_HUB_PASSWORD}}"
       - name: Delete pods if running2
         ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
         ignore_errors: true
@@ -42,10 +42,7 @@
       - name: Install Helm
         command: /opt/homebrew/bin/brew install helm
       - name: Install ngrok Ingress Controller & Creating namespace
-        ansible.builtin.shell: /opt/homebrew/bin/helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --namespace ngrok-ingress-controller --create-namespace --set credentials.apiKey=2erQPatj59x7iKJF7cGf0HwCLsw_3RNt8gVAUjnbQ964gsrvA --set credentials.authtoken=2eiEeEZ1L0WTexLPz74H09KRIim_2os4KoFhZbb1UZScjg97m
+        ansible.builtin.shell: /opt/homebrew/bin/helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --namespace ngrok-ingress-controller --create-namespace --set credentials.apiKey="{{APIKEY}}" --set credentials.authtoken="{{AUTHTOKEN}}"
         ignore_errors: true
-      # - name: Delete pods if running
-      #   ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
-      #   ignore_errors: true
       - name: Create pods
         ansible.builtin.shell: /usr/local/bin/kubectl create -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
