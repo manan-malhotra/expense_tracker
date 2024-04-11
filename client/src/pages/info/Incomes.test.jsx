@@ -5,7 +5,6 @@ import Incomes from "./Incomes";
 
 jest.mock("../../context/globalContext", () => ({
   useGlobalContext: () => ({
-    addIncome: jest.fn(),
     incomes: [
       {
         _id: 1,
