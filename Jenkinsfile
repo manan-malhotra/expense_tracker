@@ -92,7 +92,7 @@ pipeline {
                     extraVars: [
                             REMOTE_USER: "${REMOTE_USER}",
                             REMOTE_PASSWORD: "${REMOTE_PASSWORD}",
-                            DOCKER_HUB_USER: "${DOCKER_HUB_USER}"
+                            DOCKER_HUB_USER: "${DOCKER_HUB_USER}",
                             DOCKER_HUB_PASSWORD: "${DOCKER_HUB_PASSWORD}",
                             APIKEY: "${APIKEY}",
                             AUTHTOKEN: "${AUTHTOKEN}"
