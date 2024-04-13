@@ -5,4 +5,4 @@ scrape_configs:
   - job_name: "prometheus"
     scheme: "https"
     static_configs:
-      - targets: ["sure-moray-actually.ngrok-free.app:443"]
+      - targets: ["shepherd-casual-subtly.ngrok-free.app:443"]
