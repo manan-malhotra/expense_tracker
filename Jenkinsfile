@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Getting from SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/manan-malhotra/expense_tracker.git'
+                git branch: 'test', url: 'https://github.com/manan-malhotra/expense_tracker.git'
             }
         }
         stage('Installing Node modules on server') {
