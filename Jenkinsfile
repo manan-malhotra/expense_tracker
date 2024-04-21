@@ -12,9 +12,9 @@ pipeline {
     }
 
     stages {
-        stage('Getting from SCM') {
+        stage('Getting files from SCM') {
             steps {
-                git branch: 'main', url: 'https://github.com/manan-malhotra/expense_tracker.git'
+                git branch: 'test', url: 'https://github.com/manan-malhotra/expense_tracker.git'
             }
         }
         stage('Installing Node modules on server') {
@@ -45,14 +45,14 @@ pipeline {
                 }
             }
         }
-        stage('Pushing to main') {
+        stage('Pushing to main branch') {
             steps {
                 sh 'git checkout main'
                 sh 'git pull origin test'
                 sh 'git push origin main'
             }
         }
-        stage('Adding env') {
+        stage('Adding env variables') {
             steps {
                 dir('server') {
                     withCredentials([file(credentialsId: 'env', variable: 'env')]) {
