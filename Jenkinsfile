@@ -45,7 +45,7 @@ pipeline {
                 }
             }
         }
-        stage('Pushing to main') {
+        stage('Pushing to main branch') {
             steps {
                 sh 'git checkout main'
                 sh 'git pull origin test'
