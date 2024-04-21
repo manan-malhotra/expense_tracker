@@ -12,7 +12,7 @@ pipeline {
     }
 
     stages {
-        stage('Getting from SCM') {
+        stage('Getting files from SCM') {
             steps {
                 git branch: 'test', url: 'https://github.com/manan-malhotra/expense_tracker.git'
             }
