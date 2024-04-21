@@ -52,7 +52,7 @@ pipeline {
                 sh 'git push origin main'
             }
         }
-        stage('Adding env') {
+        stage('Adding env variables') {
             steps {
                 dir('server') {
                     withCredentials([file(credentialsId: 'env', variable: 'env')]) {
