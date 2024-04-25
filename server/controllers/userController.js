@@ -9,12 +9,12 @@ const registerUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!password || !username) {
     logger.log("error", "Please enter all details!");
-    res.status(400).json({ message: "Please enter all details!" });
+    return res.status(400).json({ message: "Please enter all details!" });
   }
   const userFound = await User.findOne({ username });
   if (userFound) {
     logger.log("error", "User already present.");
-    res.status(400).json({ message: "Username already present." });
+    return res.status(400).json({ message: "Username already present." });
   }
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -35,17 +35,17 @@ const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!password || !username) {
     logger.log("error", "Please enter all details!");
-    res.status(400).json({ message: "Please enter all details!" });
+    return res.status(400).json({ message: "Please enter all details!" });
   }
   const userFound = await User.findOne({ username });
   if (!userFound) {
     logger.log("error", "User not present.");
-    res.status(400).json({ message: "User not present." });
+    return res.status(400).json({ message: "User not present." });
   }
   const match = await bcrypt.compare(password, userFound.password);
   if (!match) {
     logger.log("error", "Incorrect password.");
-    res.status(400).json({ message: "Incorrect password." });
+    return res.status(400).json({ message: "Incorrect password." });
   }
 
   const token = generateToken(userFound);
