@@ -2,18 +2,18 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/UserModel");
-const { logError } = require("../logger/logger");
+const { logger } = require("../logger/logger");
 require("dotenv").config();
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!password || !username) {
-    logError("Please enter all details!");
+    logger.log("error", "Please enter all details!");
     res.status(400).json({ message: "Please enter all details!" });
   }
   const userFound = await User.findOne({ username });
   if (userFound) {
-    logError("Username already present.");
+    logger.log("error", "User already present.");
     res.status(400).json({ message: "Username already present." });
   }
   const salt = await bcrypt.genSalt(10);
@@ -23,7 +23,7 @@ const registerUser = asyncHandler(async (req, res) => {
     password: hashedPassword,
   });
   const token = generateToken(userCreated);
-  logError("User created successfully.");
+  logger.log("info", "User created successfully.");
   res.status(201).json({
     id: userCreated._id,
     username: userCreated.username,
@@ -34,22 +34,22 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
   if (!password || !username) {
-    logError("Please enter all details!");
+    logger.log("error", "Please enter all details!");
     res.status(400).json({ message: "Please enter all details!" });
   }
   const userFound = await User.findOne({ username });
   if (!userFound) {
-    logError("User not present.");
+    logger.log("error", "User not present.");
     res.status(400).json({ message: "User not present." });
   }
   const match = await bcrypt.compare(password, userFound.password);
   if (!match) {
-    logError("Incorrect password.");
+    logger.log("error", "Incorrect password.");
     res.status(400).json({ message: "Incorrect password." });
   }
 
   const token = generateToken(userFound);
-  logError("User logged in successfully.");
+  logger.log("info", "User logged in  successfully.");
   res.status(200).json({
     token,
     id: userFound._id,
