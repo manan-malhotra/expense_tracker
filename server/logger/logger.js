@@ -1,18 +1,17 @@
-const elasticsearchClient = require("./loggerClient");
+const winston = require("winston");
+const moment = require("moment");
 
-function logError(error) {
-  elasticsearchClient
-    .index({
-      index: "errors",
-      body: {
-        error: error,
-        timestamp: new Date(),
-      },
-    })
-    .then((response) =>
-      console.log("Log entry sent to Elasticsearch:", response.result),
-    )
-    .catch((err) => console.error("Error sending log entry:", err));
-}
+const logger = winston.createLogger({
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({
+      filename: "logs/app-" + moment().format("YYYY-MM-DD") + ".log",
+    }),
+  ],
+});
 
-module.exports = { logError };
+module.exports = { logger };
