@@ -1,6 +1,7 @@
 import moment from "moment";
+import { Button } from "@mui/material";
 
-const incomeColumns = [
+const incomeColumns = ({ deleteIncome, deleteExpense, flag }) => [
   { field: "title", headerName: "Title" },
   {
     field: "amount",
@@ -27,6 +28,25 @@ const incomeColumns = [
     field: "category",
     headerName: "Category",
     flex: 1,
+  },
+  {
+    field: "id",
+    headerName: "Action",
+    flex: 1,
+    renderCell: (id) => {
+      return (
+        <Button
+          variant="contained"
+          onClick={() => {
+            if (flag == "income") {
+              deleteIncome(id.id);
+            } else deleteExpense(id.id);
+          }}
+        >
+          Delete
+        </Button>
+      );
+    },
   },
 ];
 
