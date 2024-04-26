@@ -10,36 +10,32 @@ import { useGlobalContext } from "../context/globalContext";
 import { dateFormat } from "../utils/dateFormat";
 
 const Dashboard = () => {
-  const {
-    totalIncome,
-    totalExpenses,
-    totalBalance,
-    transactionHistory,
-    numberOfTransactions,
-    token,
-  } = useGlobalContext();
+  const { totalIncome, totalExpenses, transactionHistory } = useGlobalContext();
   const [history, setHistory] = useState([]);
   const [totalI, setTotalI] = useState(0);
   const [totalE, setTotalE] = useState(0);
   const [totalAvailableBalance, setTotalAvailableBalance] = useState(0);
   const [num, setNum] = useState(0);
+  const getData = async () => {
+    const responseIncome = await totalIncome();
+    const responseExpense = await totalExpenses();
+    let incomes = 0;
+    let expenses = 0;
+    responseIncome.data.forEach((i) => {
+      incomes = incomes + i.amount;
+    });
+    responseExpense.data.forEach((expense) => {
+      expenses = expenses + expense.amount;
+    });
+    setTotalI(incomes);
+    setTotalE(expenses);
+    setTotalAvailableBalance(incomes - expenses);
+    const hist = await transactionHistory(responseIncome, responseExpense);
+    setHistory(hist);
+    setNum(hist.length);
+  };
   useEffect(() => {
-    // if (!token) return;
-    totalIncome().then((income) => {
-      setTotalI(income);
-    });
-    totalExpenses().then((expense) => {
-      setTotalE(expense);
-    });
-    totalBalance().then((balance) => {
-      setTotalAvailableBalance(balance);
-    });
-    numberOfTransactions().then((num) => {
-      setNum(num);
-    });
-    transactionHistory().then((history) => {
-      setHistory(history);
-    });
+    getData();
   }, []);
 
   const theme = useTheme();
@@ -90,9 +86,7 @@ const Dashboard = () => {
             title={"₹ " + totalI}
             subtitle="Income"
             progress={totalI / totalAvailableBalance}
-            increase={
-              "+" + ((totalI / totalAvailableBalance) * 100).toFixed(0) + "%"
-            }
+            increase={""}
             icon={
               <AttachMoneyIcon
                 sx={{

@@ -66,21 +66,16 @@ export const GlobalProvider = ({ children }) => {
 
   const deleteIncome = async (id) => {
     const res = await axiosSetter.delete(
-      `${BASE_URL}transactions/deleteIncome/${id}`,
+      `${BASE_URL}transactions/deleteIncome/${id}`
     );
     getIncomes();
   };
 
   const totalIncome = async () => {
     const responseIncome = await axiosSetter.get(
-      `${BASE_URL}transactions/getIncome`,
+      `${BASE_URL}transactions/getIncome`
     );
-    let totalIncome = 0;
-    responseIncome.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
-    });
-
-    return totalIncome;
+    return responseIncome;
   };
 
   //calculate incomes
@@ -95,76 +90,38 @@ export const GlobalProvider = ({ children }) => {
 
   const getExpenses = async () => {
     const response = await axiosSetter.get(
-      `${BASE_URL}transactions/getExpense`,
+      `${BASE_URL}transactions/getExpense`
     );
     setExpenses(response.data);
   };
 
   const deleteExpense = async (id) => {
     const res = await axiosSetter.delete(
-      `${BASE_URL}transactions/deleteExpense/${id}`,
+      `${BASE_URL}transactions/deleteExpense/${id}`
     );
     getExpenses();
   };
 
   const totalExpenses = async () => {
     const responseExpense = await axiosSetter.get(
-      `${BASE_URL}transactions/getExpense`,
+      `${BASE_URL}transactions/getExpense`
     );
-    let totalIncome = 0;
-    responseExpense.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
-    });
-
-    return totalIncome;
+    return responseExpense;
   };
 
-  const totalBalance = async () => {
-    const responseIncome = await axiosSetter.get(
-      `${BASE_URL}transactions/getIncome`,
-    );
-    let totalIncome = 0;
-    responseIncome.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
-    });
-    const responseExpense = await axiosSetter.get(
-      `${BASE_URL}transactions/getExpense`,
-    );
-    let totalExpense = 0;
-    responseExpense.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
-    });
-    return totalIncome - totalExpense;
-  };
-
-  const transactionHistory = async () => {
-    const responseExpense = await axiosSetter.get(
-      `${BASE_URL}transactions/getExpense`,
-    );
-    const responseIncome = await axiosSetter.get(
-      `${BASE_URL}transactions/getIncome`,
-    );
+  const transactionHistory = async (responseIncome, responseExpense) => {
+    // const responseExpense = await axiosSetter.get(
+    //   `${BASE_URL}transactions/getExpense`
+    // );
+    // const responseIncome = await axiosSetter.get(
+    //   `${BASE_URL}transactions/getIncome`
+    // );
     const history = [...responseExpense.data, ...responseIncome.data];
     history.sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     return history;
-  };
-
-  const numberOfTransactions = async () => {
-    const responseExpense = await axiosSetter.get(
-      `${BASE_URL}transactions/getExpense`,
-    );
-    const responseIncome = await axiosSetter.get(
-      `${BASE_URL}transactions/getIncome`,
-    );
-    const history = [...responseExpense.data, ...responseIncome.data];
-    history.sort((a, b) => {
-      return new Date(b.createdAt) - new Date(a.createdAt);
-    });
-
-    return history.length;
   };
 
   return (
@@ -180,9 +137,7 @@ export const GlobalProvider = ({ children }) => {
         getExpenses,
         deleteExpense,
         totalExpenses,
-        totalBalance,
         transactionHistory,
-        numberOfTransactions,
         error,
         setError,
         login,
