@@ -63,7 +63,7 @@ const Income = () => {
           <DataGrid
             getRowId={(row) => row._id}
             rows={incomes}
-            columns={incomeColumns}
+            columns={incomeColumns({ deleteIncome, flag: "income" })}
             components={{ Toolbar: GridToolbar }}
           />
         )}

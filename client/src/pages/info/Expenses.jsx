@@ -9,7 +9,7 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const Expenses = () => {
-  const { expenses, getExpenses } = useGlobalContext();
+  const { expenses, getExpenses, deleteExpense } = useGlobalContext();
   useEffect(() => {
     getExpenses();
   }, []);
@@ -41,7 +41,7 @@ const Expenses = () => {
             borderBottom: "none",
           },
           "& .name-column--cell": {
-            color: colors.greenAccent[300],
+            color: colors.redAccent[300],
           },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
@@ -65,7 +65,7 @@ const Expenses = () => {
         <DataGrid
           getRowId={(row) => row._id}
           rows={expenses}
-          columns={incomeColumns}
+          columns={incomeColumns({ deleteExpense, flag: "expense" })}
           components={{ Toolbar: GridToolbar }}
         />
       </Box>

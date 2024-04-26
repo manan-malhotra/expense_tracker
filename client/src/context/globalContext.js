@@ -111,12 +111,12 @@ export const GlobalProvider = ({ children }) => {
     const responseExpense = await axiosSetter.get(
       `${BASE_URL}transactions/getExpense`,
     );
-    let totalIncome = 0;
-    responseExpense.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
+    let totalExpense = 0;
+    responseExpense.data.forEach((expense) => {
+      totalExpense = totalExpense + expense.amount;
     });
 
-    return totalIncome;
+    return totalExpense;
   };
 
   const totalBalance = async () => {
@@ -131,8 +131,8 @@ export const GlobalProvider = ({ children }) => {
       `${BASE_URL}transactions/getExpense`,
     );
     let totalExpense = 0;
-    responseExpense.data.forEach((income) => {
-      totalIncome = totalIncome + income.amount;
+    responseExpense.data.forEach((expense) => {
+      totalExpense = totalExpense + expense.amount;
     });
     return totalIncome - totalExpense;
   };

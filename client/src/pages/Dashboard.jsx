@@ -1,4 +1,4 @@
-import { Header, StatBox, Chart } from "../components";
+import { Chart, Header, StatBox } from "../components";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../styles/theme";
 import React, { useEffect, useState } from "react";
@@ -90,9 +90,7 @@ const Dashboard = () => {
             title={"₹ " + totalI}
             subtitle="Income"
             progress={totalI / totalAvailableBalance}
-            increase={
-              "+" + ((totalI / totalAvailableBalance) * 100).toFixed(0) + "%"
-            }
+            increase={""}
             icon={
               <AttachMoneyIcon
                 sx={{
