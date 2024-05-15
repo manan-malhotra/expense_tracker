@@ -26,6 +26,8 @@ const mockHistory = [
 jest.mock("../../context/globalContext", () => ({
   useGlobalContext: () => ({
     transactionHistory: jest.fn().mockResolvedValue(mockHistory),
+    totalIncome: jest.fn().mockResolvedValue(1000),
+    totalExpenses: jest.fn().mockResolvedValue(2000),
   }),
 }));
 
@@ -34,7 +36,7 @@ describe("TransactionHistory component", () => {
     render(<TransactionHistory />);
     expect(screen.getByText("Transaction History")).toBeTruthy();
     expect(
-      screen.getByText("List of Transactions for Future Reference")
+      screen.getByText("List of Transactions for Future Reference"),
     ).toBeTruthy();
     await screen.findByText("Transaction 1");
     expect(screen.getByText("Transaction 1")).toBeTruthy();
