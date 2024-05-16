@@ -42,7 +42,7 @@ metadata:
 spec:
     ingressClassName: ngrok
     rules:
-        - host: shepherd-casual-subtly.ngrok-free.app
+        - host: mouse-powerful-virtually.ngrok-free.app
           http:
               paths:
                   - path: /
