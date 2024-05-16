@@ -13,7 +13,7 @@
       - name: git pull
         git:
             repo: https://github.com/manan-malhotra/expense_tracker.git
-            dest: /Users/yashtalele/expense_tracker
+            dest: /Users/mananmalhotra/expense_tracker
       - name: Stop Docker containers
         community.general.docker_container:
             name: exp
@@ -29,7 +29,7 @@
             tag: latest
             source: build
             build:
-                path: /Users/yashtalele/expense_tracker/client/
+                path: /Users/mananmalhotra/expense_tracker/client/
                 dockerfile: Dockerfile
       - name: Push Docker image to Docker Hub
         community.general.docker_image:
