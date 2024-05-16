@@ -42,7 +42,7 @@
       - name: Install Helm
         command: /opt/homebrew/bin/brew install helm
       - name: Install ngrok Ingress Controller & Creating namespace
-        ansible.builtin.shell: /opt/homebrew/bin/helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --namespace ngrok-ingress-controller --create-namespace --set credentials.apiKey="{{APIKEY}}" --set credentials.authtoken="{{AUTHTOKEN}}"
+        ansible.builtin.shell: /opt/homebrew/bin/helm upgrade -i ngrok-ingress-controller ngrok/kubernetes-ingress-controller --namespace ngrok-ingress-controller --create-namespace --set credentials.apiKey="{{APIKEY}}" --set credentials.authtoken="{{AUTHTOKEN}}"
         ignore_errors: true
       - name: Create pods
         ansible.builtin.shell: /usr/local/bin/kubectl create -f /Users/mananmalhotra/expense_tracker/server/kubernetes.yml
