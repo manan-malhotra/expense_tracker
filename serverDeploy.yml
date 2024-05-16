@@ -9,13 +9,13 @@
       - name: Environment setup
         ansible.builtin.copy:
             src: server/.env
-            dest: /Users/yashtalele/expense_tracker/server/.env
+            dest: /Users/mananmalhotra/expense_tracker/server/.env
       - name: Login in docker hub with user
         community.general.docker_login:
             username: "{{DOCKER_HUB_USER}}"
             password: "{{DOCKER_HUB_PASSWORD}}"
       - name: Delete pods if running2
-        ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
+        ansible.builtin.shell: /usr/local/bin/kubectl delete -f /Users/mananmalhotra/expense_tracker/server/kubernetes.yml
         ignore_errors: true
       - name: Sleep
         ansible.builtin.shell: sleep 30
@@ -31,7 +31,7 @@
             tag: latest
             source: build
             build:
-                path: /Users/yashtalele/expense_tracker/server/
+                path: /Users/mananmalhotra/expense_tracker/server/
                 dockerfile: Dockerfile
       - name: Push Docker image to Docker Hub
         community.general.docker_image:
@@ -45,4 +45,4 @@
         ansible.builtin.shell: /opt/homebrew/bin/helm install ngrok-ingress-controller ngrok/kubernetes-ingress-controller --namespace ngrok-ingress-controller --create-namespace --set credentials.apiKey="{{APIKEY}}" --set credentials.authtoken="{{AUTHTOKEN}}"
         ignore_errors: true
       - name: Create pods
-        ansible.builtin.shell: /usr/local/bin/kubectl create -f /Users/yashtalele/expense_tracker/server/kubernetes.yml
+        ansible.builtin.shell: /usr/local/bin/kubectl create -f /Users/mananmalhotra/expense_tracker/server/kubernetes.yml
